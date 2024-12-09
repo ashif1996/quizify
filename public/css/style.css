@@ -1,0 +1,80 @@
+/* styles.css */
+body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+a {
+    text-decoration: none;
+}
+
+.error-border {
+    border: 1px solid red !important;
+}
+
+.error-message {
+    color: red;
+}
+
+.flash-messages-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.flash-messages {
+    width: 80%;
+    max-width: 600px;
+    text-align: center;
+}
+
+.homepage {
+    background-image: url("/images/quiz-main.png"); /* Replace with your image path */
+    background-size: cover;  /* Makes the image cover the whole screen */
+    background-position: center;  /* Centers the background image */
+    height: 100vh;  /* Full viewport height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;  /* White text color */
+}
+
+/* Container for the welcome message */
+.welcome-container {
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Styling the main title */
+h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+/* Styling the paragraph text */
+p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+/* Styling the Start Quiz button */
+.start-quiz-btn {
+    background-color: #ff5733;  /* Button color (change as needed) */
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Hover effect for the button */
+.start-quiz-btn:hover {
+    background-color: #e04e28;  /* Slightly darker shade */
+}
