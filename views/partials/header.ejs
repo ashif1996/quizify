@@ -17,6 +17,31 @@
                         </nav>
                     </div>
                 </div>
+                <div class="col-xl-3 col-lg-3 d-none d-lg-block">
+                    <div class="header-right d-flex align-items-center justify-content-end">
+                        <% if (isLoggedIn) { %>
+                            <div class="dropdown">
+                                <button 
+                                    class="btn btn-secondary dropdown-toggle" 
+                                    type="button" 
+                                    id="userDropdown" 
+                                    data-bs-toggle="dropdown" 
+                                    aria-expanded="false">
+                                    <%= username %>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                    <li><a class="dropdown-item" href="/users/user-profile">Profile</a></li>
+                                    <li><a class="dropdown-item" href="/users/logout">Logout</a></li>
+                                </ul>
+                            </div>
+                        <% } else { %>
+                            <!-- User is not logged in -->
+                            <div class="user-login">
+                                <a href="/users/login" class="line_btn">Login</a>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -1,0 +1,12 @@
+<link rel="stylesheet" href="/css/user.css">
+
+<div class="email-status-container">
+    <h1 style=`color: <%= success ? '#4caf50' : '#f44336' %>;`><%= success ? "Success!" : "Error!" %></h1>
+    <p><%= message %></p>
+    <% if (!success) { %>
+        <p>You can request a new verification email from your profile.</p>
+        <a href="/users/user-profile">Go to profile</a>
+    <% } else { %>
+        <a href="/">Go to Home</a>
+    <% } %>
+</div>
