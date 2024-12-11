@@ -1,0 +1,313 @@
+.error-border {
+    border: 1px solid red !important;
+}
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 8px; /* Slight overlap if needed */
+    margin-bottom: 15px;
+    
+    text-align: left;
+    display: block;
+    width: 100%; /* Ensure it spans the full width of its parent container */
+    box-sizing: border-box; /* Ensure padding doesn’t overflow */
+}
+.flash-messages {
+    width: 100%; /* Match the width of the column */
+    margin-bottom: 20px; /* Add some space below */
+}
+
+.alert {
+    margin-bottom: 0; /* Remove default margin */
+    padding: 10px 15px; /* Adjust padding for better appearance */
+    border-radius: 5px; /* Optional: Rounded corners */
+}
+
+.login-line {
+    width: 50%;
+    max-width: 80px;
+    height: 4px;
+    background: #4CAF50;
+    margin: 15px auto;
+    border-radius: 5px;
+}
+
+.login_box_area {
+    width: 100%; /* Ensure full width of the screen */
+    max-width: 100%;
+    display: flex; /* Add flex for alignment */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    min-height: 100vh; /* Ensure it spans the viewport height */
+}
+
+.login_form_inner {
+    max-width: 600px; /* Adjust width */
+    width: 100%; /* Allow full width if needed */
+    padding: 40px;
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.login_form_inner h3 {
+    color: #222222;
+    font-size: 24px; /* Clearer heading size */
+    margin-bottom: 20px;
+}
+
+.login_form_inner .form-group input {
+    width: 100%; /* Ensure input fields are fully aligned with their parent container */
+    max-width: 450px; /* Matches container width */
+    height: 50px;
+    margin: 15px auto;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    padding: 10px;
+    font-size: 16px;
+    box-sizing: border-box; /* Ensure padding doesn’t overflow */
+}
+
+
+.login_form_inner .form-group input:focus {
+    border-color: #85FF00;
+    box-shadow: 0 0 5px rgba(133, 255, 0, 0.5);
+}
+
+.login-btn {
+    background: linear-gradient(45deg, #42b72a, #85FF00);
+    color: #fff;
+    width: 90%; /* Matches inputs' width */
+    max-width: 450px; /* Matches container width */
+    height: 50px;
+    border-radius: 30px;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+    background: #fff;
+    color: #42b72a;
+    border: 1px solid #42b72a;
+}
+/* Fix for Signup Button */
+.signup-btn {
+    display: block; /* Ensure it behaves like a block element */
+    text-align: center; /* Center the text */
+    background: linear-gradient(45deg, #2980b9, #3498db);
+    color: #fff;
+    width: 90%; /* Matches inputs' width */
+    max-width: 450px; /* Matches container width */
+    height: 50px;
+    border-radius: 30px;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    margin: 20px auto; /* Add spacing and center it */
+    line-height: 50px; /* Align text vertically */
+    text-decoration: none; /* Remove underline */
+    transition: all 0.3s ease;
+}
+
+.signup-btn:hover {
+    background: #fff;
+    color: #3498db;
+    border: 1px solid #3498db;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    display: block;
+    margin-top: -5px;
+    margin-bottom: 15px;
+}
+
+.forgot-password-link {
+    font-size: 16px; /* Readable font size */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Prevent it from behaving like a button */
+    margin-top: 10px; /* Add spacing above */
+}
+
+.forgot-password-link:hover {
+    text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .login_form_inner {
+        max-width: 90%; /* Wider on small screens */
+        padding: 20px;
+    }
+
+    .login_form_inner h3 {
+        font-size: 20px;
+    }
+
+    .login-btn {
+        font-size: 16px;
+        height: 45px;
+    }
+
+    .login_form_inner .form-group input {
+        font-size: 14px;
+    }
+}
+
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Adjust as needed */
+    background-color: #f8f9fa;
+}
+.signup-form {
+    max-width: 600px;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.already-account {
+    text-align: center;
+    margin-top: 20px;
+}
+.already-account .already-account-underline:hover {
+    text-decoration: underline !important;
+}
+
+/* Center the profile container */
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh; /* Adjust as needed */
+}
+
+.profile-container {
+    max-width: 600px;
+    width: 100%;
+    padding: 2rem;
+    background: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+section {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+section h2 {
+    font-size: 1.8rem;
+    color: #4caf50;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+section h2::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: #4caf50;
+    border-radius: 2px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+ul li {
+    padding: 0.5rem 0;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+ul li strong {
+    font-weight: 600;
+    color: #555;
+}
+
+ul li svg {
+    color: #4caf50;
+}
+
+/* Empty State Message */
+section p {
+    font-size: 1.2rem;
+    color: #888;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    section h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.email-status-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
+    width: 80%; /* Adjust width to prevent full-width container */
+    max-width: 600px;
+    margin: 150px auto 0; /* Adds margin-top to create space at the top */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Ensures content is centered inside */
+}
+
+.email-status-container h1 {
+    font-size: 2rem;
+}
+.email-status-container p {
+    font-size: 1.2rem;
+    color: #555;
+    margin-top: 20px;
+}
+.email-status-container a {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    color: #fff;
+    background-color: #4caf50;
+    text-decoration: none;
+    border-radius: 5px;
+}
+.email-status-container a:hover {
+    background-color: #45a049;
+}
