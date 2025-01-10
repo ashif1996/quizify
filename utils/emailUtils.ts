@@ -1,12 +1,13 @@
 import crypto from "crypto";
+import { SentMessageInfo } from "nodemailer";
 
 import transporter from "../config/emailConfig.js";
 
-const generateVerificationToken = () => {
+const generateVerificationToken = (): string => {
     return crypto.randomBytes(32).toString("hex");
 };
 
-const sendVerificationEmail = async (email, token) => {
+const sendVerificationEmail = async (email: string, token: string): Promise<SentMessageInfo> => {
     const verificationLink = `http://localhost:3000/users/verify-email?token=${token}`;
 
     const mailOptions = {
@@ -21,7 +22,7 @@ const sendVerificationEmail = async (email, token) => {
         const info = await transporter.sendMail(mailOptions);
         return info;
     } catch (error) {
-        console.error("Email sending failed:", error);
+        console.error("Email sending failed:", error as Error);
         throw new Error("Email sending failed");
     }
 };
