@@ -1,59 +1,80 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+import dotenv from "dotenv";
+dotenv.config();
 
-const User = require("../models/userModel");
-const QuizHistory = require("../models/quizHistoryModel");
+import { Request, Response } from "express";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
-const httpStatusCodes = require("../utils/httpStatusCodes");
-const showFlashMessages = require("../utils/messageUtils");
-const {
+import { ObjectId } from "mongoose";
+import User, { UserDocument} from "../models/userModel.js";
+import QuizHistory from "../models/quizHistoryModel.js";
+
+import httpStatusCodes from "../utils/httpStatusCodes.js";
+import showFlashMessages from "../utils/messageUtils.js";
+import { fetchUserId } from "../utils/userUtils.js";
+import {
     generateVerificationToken,
     sendVerificationEmail,
-} = require("../utils/emailUtils");
-const { fetchUserId } = require("../utils/userUtils");
+} from "../utils/emailUtils.js";
 
-const getUserLogin = (req, res) => {
-    const locals = { title: "User Login | Quizify" };
-    return res.status(httpStatusCodes.OK).render("users/login", {
+interface Locals {
+    title: string;
+}
+
+interface JwtPayload {
+    userId: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+}
+
+const getUserLogin = (req: Request, res: Response): void => {
+    const locals: Locals = { title: "User Login | Quizify" };
+    res.status(httpStatusCodes.OK).render("users/login", {
         locals,
         layout: "layouts/authLayout",
     });
 };
 
-const userLogin = async (req, res) => {
+const userLogin = async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body;
 
     try {
-         const user = await User.findOne({ email });
-         if (!user) {
-            return showFlashMessages({
+        const user = await User.findOne({ email })
+            .select("_id firstName lastName email password")
+            .lean();
+
+        if (!user) {
+            showFlashMessages({
                 req,
                 res,
                 message: "User not found.",
                 status: httpStatusCodes.NOT_FOUND,
                 redirectUrl: "/users/login",
             });
-         }
+            return;
+        }
 
-         const isPasswordMatch = await bcrypt.compare(password, user.password);
-         if (!isPasswordMatch) {
-            return showFlashMessages({
+        const isPasswordMatch: boolean = await bcrypt.compare(password, user.password);
+        if (!isPasswordMatch) {
+            showFlashMessages({
                 req,
                 res,
                 message: "Password does not match.",
                 status: httpStatusCodes.UNAUTHORIZED,
                 redirectUrl: "/users/login",
             });
-         }
+            return;
+        }
 
-         const payload = {
-            userId: user._id,
+        const payload: JwtPayload = {
+            userId: user._id.toString(),
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
         };
 
-        const token = jwt.sign(payload, process.env.JWT_SECRET, {
+        const token: string = jwt.sign(payload, process.env.JWT_SECRET, {
             expiresIn: 3600,
         });
 
@@ -64,17 +85,16 @@ const userLogin = async (req, res) => {
             sameSite: "strict",
         });
 
-        return showFlashMessages({
+        showFlashMessages({
             req,
             res,
             type: "success",
-            message: "Login successful!",
             status: httpStatusCodes.OK,
             redirectUrl: "/",
         });
     } catch (error) {
-        console.error("An internal error occurred:", error);
-        return showFlashMessages({
+        console.error("An internal error occurred:", error as Error);
+        showFlashMessages({
             req,
             res,
             message: "An unexpected error occurred. Please try again later.",
@@ -84,14 +104,14 @@ const userLogin = async (req, res) => {
     }
 };
 
-const userLogout = (req, res) => {
+const userLogout = (req: Request, res: Response): void => {
     res.clearCookie("authToken", {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
     });
 
-    return showFlashMessages({
+    showFlashMessages({
         req,
         res,
         type: "success",
@@ -101,42 +121,44 @@ const userLogout = (req, res) => {
     });
 };
 
-const getUserSignup = (req, res) => {
-    const locals = { title: "User Signup | Quizify" };
-    return res.status(httpStatusCodes.OK).render("users/signup", {
+const getUserSignup = (req: Request, res: Response): void => {
+    const locals: Locals = { title: "User Signup | Quizify" };
+    res.status(httpStatusCodes.OK).render("users/signup", {
         locals,
         layout: "layouts/authLayout",
     });
 };
 
-const userSignup = async (req, res) => {
+const userSignup = async (req: Request, res: Response): Promise<void> => {
     const { firstName, lastName, email, password, confirmPassword } = req.body;
 
     try {
-        const isExistingUser = await User.findOne({ email });
+        const isExistingUser = await User.exists({ email });
         if (isExistingUser) {
-            return showFlashMessages({
+            showFlashMessages({
                 req,
                 res,
                 message: "Email is already registered.",
                 status: httpStatusCodes.BAD_REQUEST,
                 redirectUrl: "/users/signup",
             });
+            return;
         }
 
         if (password !== confirmPassword) {
-            return showFlashMessages({
+            showFlashMessages({
                 req,
                 res,
                 message: "Passwords do not match.",
                 status: httpStatusCodes.BAD_REQUEST,
                 redirectUrl: "/users/signup",
             });
+            return;
         }
 
-        const token = generateVerificationToken();
+        const token: string = generateVerificationToken();
 
-        const user = new User({
+        await User.create({
             firstName,
             lastName,
             email,
@@ -145,10 +167,9 @@ const userSignup = async (req, res) => {
             verificationTokenExpires: Date.now() + 3600000,
         });
 
-        await user.save();
         await sendVerificationEmail(email, token);
 
-        return showFlashMessages({
+        showFlashMessages({
             req,
             res,
             type: "success",
@@ -157,8 +178,8 @@ const userSignup = async (req, res) => {
             redirectUrl: "/users/login",
         });
     } catch (error) {
-        console.error("An internal error occurred:", error);
-        return showFlashMessages({
+        console.error("An internal error occurred:", error as Error);
+        showFlashMessages({
             req,
             res,
             message: "An unexpected error occurred. Please try again later.",
@@ -168,11 +189,13 @@ const userSignup = async (req, res) => {
     }
 };
 
-const verifyEmail = async (req, res) => {
+const verifyEmail = async (req: Request, res: Response): Promise<void> => {
     const { token } = req.query;
 
     try {
-        const user = await User.findOne({ verificationToken: token });
+        const user = await User.findOne({ verificationToken: token })
+            .select("_id isVerified verificationToken verificationTokenExpires");
+
         if (!user) {
             return res.status(httpStatusCodes.BAD_REQUEST).render("users/email-verification-status", {
                 title: "Email Verification Failed",
@@ -182,7 +205,7 @@ const verifyEmail = async (req, res) => {
             });
         }
 
-        if (Date.now() > user.verificationTokenExpires) {
+        if (user.verificationTokenExpires && Date.now() > user.verificationTokenExpires.getTime()) {
             return res.status(httpStatusCodes.BAD_REQUEST).render("users/email-verification-status", {
                 title: "Email Verification Failed",
                 message: "Your verification token has expired. Please request a new verification email.",
@@ -202,16 +225,16 @@ const verifyEmail = async (req, res) => {
             },
         );
 
-        return res.status(httpStatusCodes.OK).render("users/email-verification-status", {
+        res.status(httpStatusCodes.OK).render("users/email-verification-status", {
             title: "Email Verified Successfully",
             message: "Your email has been verified. You can now check your profile.",
             success: true,
             layout: "layouts/authLayout",
         });
     } catch (error) {
-        console.log("An internal error occurred during email verification:", error);
+        console.log("An internal error occurred during email verification:", error as Error);
 
-        return res.status(httpStatusCodes.INTERNAL_SERVER_ERROR).render("users/email-verification-status", {
+        res.status(httpStatusCodes.INTERNAL_SERVER_ERROR).render("users/email-verification-status", {
             title: "Internal Server Error",
             message: "Something went wrong. Please try again later.",
             success: false,
@@ -220,22 +243,25 @@ const verifyEmail = async (req, res) => {
     }
 };
 
-const resendVerificationEmail = async (req, res) => {
+const resendVerificationEmail = async (req: Request, res: Response): Promise<void> => {
     const { email } = req.body;
 
     try {
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email })
+            .select("email verificationToken verificationTokenExpires");
+
         if (!user) {
-            return showFlashMessages({
+            showFlashMessages({
                 req,
                 res,
                 message: "No user found with this email address.",
                 status: httpStatusCodes.NOT_FOUND,
                 redirectUrl: "/users/user-profile",
             });
+            return;
         }
 
-        const token = generateVerificationToken();
+        const token: string = generateVerificationToken();
 
         await User.updateOne(
             { email },
@@ -249,7 +275,7 @@ const resendVerificationEmail = async (req, res) => {
 
         await sendVerificationEmail(email, token);
 
-        return showFlashMessages({
+        showFlashMessages({
             req,
             res,
             type: "success",
@@ -258,8 +284,8 @@ const resendVerificationEmail = async (req, res) => {
             redirectUrl: "/users/user-profile",
         });
     } catch (error) {
-        console.error("An internal error occurred:", error);
-        return showFlashMessages({
+        console.error("An internal error occurred:", error as Error);
+        showFlashMessages({
             req,
             res,
             message: "An unexpected error occurred. Please try again later.",
@@ -269,23 +295,23 @@ const resendVerificationEmail = async (req, res) => {
     }
 };
 
-const getUserProfile = async (req, res) => {
-    const locals = { title: "User Profile | Quizify" };
+const getUserProfile = async (req: Request, res: Response): Promise<void> => {
+    const locals: Locals = { title: "User Profile | Quizify" };
 
     try {
-        const userId = await fetchUserId(req);
+        const userId = fetchUserId(req);
         const user = await User.findById(userId)
             .populate("quizHistory")
             .lean();
 
-        return res.status(httpStatusCodes.OK).render("users/profile", {
+        res.status(httpStatusCodes.OK).render("users/profile", {
             locals,
             user,
             layout: "layouts/mainLayout",
         });
     } catch (error) {
-        console.error("An internal error occurred:", error);
-        return showFlashMessages({
+        console.error("An internal error occurred:", error as Error);
+        showFlashMessages({
             req,
             res,
             message: "An unexpected error occurred. Please try again later.",
@@ -295,7 +321,7 @@ const getUserProfile = async (req, res) => {
     }
 };
 
-module.exports = {
+export default {
     getUserLogin,
     userLogin,
     userLogout,
