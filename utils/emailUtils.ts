@@ -1,5 +1,6 @@
-const crypto = require("crypto");
-const transporter = require("../config/emailConfig");
+import crypto from "crypto";
+
+import transporter from "../config/emailConfig.js";
 
 const generateVerificationToken = () => {
     return crypto.randomBytes(32).toString("hex");
@@ -11,7 +12,7 @@ const sendVerificationEmail = async (email, token) => {
     const mailOptions = {
         from: process.env.SEND_OTP_EMAIL,
         to: email,
-        subject: 'Email Verification',
+        subject: "Email Verification",
         html: `<p>Please verify your email by clicking the link below:</p>
                <a href="${verificationLink}">${verificationLink}</a>`,
     };
@@ -25,7 +26,7 @@ const sendVerificationEmail = async (email, token) => {
     }
 };
 
-module.exports = {
+export {
     generateVerificationToken,
     sendVerificationEmail,
 };

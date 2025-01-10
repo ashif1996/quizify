@@ -1,32 +1,35 @@
-const jwt = require("jsonwebtoken");
+import express, { Request, Response, NextFunction } from "express";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
-const showFlashMessages = require("../utils/messageUtils");
+import httpStatusCodes from "../utils/httpStatusCodes.js";
+import showFlashMessages from "./messageUtils.js";
 
-const isTokenPresent = (req, redirectUrl) => {
+const isTokenPresent = (req: Request, res: Response, redirectUrl: string): string | void => {
     const token = req.cookies.authToken || req.header("Authorization")?.replace("Bearer ", "");
     if (!token) {
-        return showFlashMessages({
+        showFlashMessages({
             req,
             res,
             message: "Token not found.",
             status: httpStatusCodes.NOT_FOUND,
             redirectUrl: redirectUrl,
         });
+        return;
     }
 
     return token;
 };
 
-const fetchUserId = (req) => {
-    let userId;
+const fetchUserId = (req: Request): string | undefined => {
+    let userId: string | undefined;
 
     const token = req.cookies.authToken || req.header("Authorization")?.replace("Bearer ", "");
     if (token) {
         try {
             const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-            userId = decodedToken.userId;
+            userId = (decodedToken as JwtPayload).userId as string;
         } catch (error) {
-            if (error.name === "TokenExpiredError") {
+            if ((error as Error).name === "TokenExpiredError") {
                 console.warn("Token is expired, proceeding as an unauthenticated user.");
             } else {
                 console.error("Error verifying token:", error);
@@ -37,7 +40,7 @@ const fetchUserId = (req) => {
     return userId;
 };
 
-module.exports = {
+export {
     isTokenPresent,
     fetchUserId,
 };
