@@ -2,10 +2,14 @@
   "name": "quizify",
   "version": "1.0.0",
   "description": "Quizify is an interactive web app that allows users to take quizzes on various topics, track their scores, and improve their knowledge in a fun and engaging way.",
-  "main": "index.js",
+  "main": "app.ts",
+  "type": "module",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js"
+    "build:server": "tsc --project tsconfig.json",
+    "build:client": "tsc --project tsconfig.client.json",
+    "build": "npm run build:server && npm run build:client",
+    "start": "node dist/app.js",
+    "serve": "npm run build && npm start"
   },
   "keywords": [],
   "author": "Ashif Hassan",
@@ -25,6 +29,18 @@
     "nodemailer": "^6.9.16"
   },
   "devDependencies": {
-    "nodemon": "^3.1.7"
+    "@types/bcrypt": "^5.0.2",
+    "@types/connect-flash": "^0.0.40",
+    "@types/cookie-parser": "^1.4.8",
+    "@types/express": "^5.0.0",
+    "@types/express-ejs-layouts": "^2.5.4",
+    "@types/express-session": "^1.18.1",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/mongoose": "^5.11.97",
+    "@types/node": "^22.10.5",
+    "@types/nodemailer": "^6.4.17",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
   }
 }
