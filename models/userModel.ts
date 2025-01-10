@@ -1,6 +1,20 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
-const bcrypt = require("bcrypt");
+import mongoose, { Document, Model, Schema, ObjectId } from "mongoose";
+import bcrypt from "bcrypt";
+
+export interface UserDocument extends Document {
+    _id: ObjectId;
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    role: string;
+    isVerified: boolean;
+    verificationToken?: string;
+    verificationTokenExpires?: Date;
+    quizHistory: mongoose.Types.ObjectId[];  // Referencing QuizHistory documents
+    totalPoints: number;
+    createdAt: Date;
+}
 
 const userSchema = new Schema({
     firstName: {
@@ -71,6 +85,6 @@ userSchema.pre("save", async function(next) {
     next();
 });
 
-const User = mongoose.model("User", userSchema);
+const User: Model<UserDocument> = mongoose.model<UserDocument>("User", userSchema);
 
-module.exports = User;
+export default User;

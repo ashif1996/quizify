@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import mongoose from "mongoose";
+const { Schema } = mongoose;
 
 const quizHistorySchema = new Schema({
     userId: {
@@ -21,4 +21,4 @@ const quizHistorySchema = new Schema({
 
 const QuizHistory = mongoose.model("QuizHistory", quizHistorySchema);
 
-module.exports = QuizHistory;
+export default QuizHistory;
