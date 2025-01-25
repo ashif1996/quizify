@@ -11,7 +11,7 @@ export interface UserDocument extends Document {
     isVerified: boolean;
     verificationToken?: string;
     verificationTokenExpires?: Date;
-    quizHistory: mongoose.Types.ObjectId[];  // Referencing QuizHistory documents
+    quizHistory: mongoose.Types.ObjectId[];
     totalPoints: number;
     createdAt: Date;
 }
@@ -64,7 +64,7 @@ const userSchema = new Schema({
         {
             type: Schema.Types.ObjectId,
             ref: "QuizHistory",
-        }
+        },
     ],
     totalPoints: {
         type: Number,
@@ -75,6 +75,8 @@ const userSchema = new Schema({
         default: Date.now,
     },
 });
+
+userSchema.index({ email: 1 }, { unique: true });
 
 userSchema.pre("save", async function(next) {
     if (this.isModified("password")) {
