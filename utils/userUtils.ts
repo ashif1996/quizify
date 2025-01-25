@@ -7,20 +7,19 @@ import showFlashMessages from "./messageUtils.js";
 const isTokenPresent = (req: Request, res: Response, redirectUrl: string): string | void => {
     const token = req.cookies.authToken || req.header("Authorization")?.replace("Bearer ", "");
     if (!token) {
-        showFlashMessages({
+        return showFlashMessages({
             req,
             res,
             message: "Token not found.",
             status: httpStatusCodes.NOT_FOUND,
             redirectUrl: redirectUrl,
         });
-        return;
     }
 
     return token;
 };
 
-const fetchUserId = (req: Request): string | undefined => {
+const fetchUserId = (req: Request) => {
     let userId: string | undefined;
 
     const token = req.cookies.authToken || req.header("Authorization")?.replace("Bearer ", "");
