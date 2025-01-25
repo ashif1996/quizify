@@ -1,13 +1,15 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import crypto from "crypto";
-import { SentMessageInfo } from "nodemailer";
 
 import transporter from "../config/emailConfig.js";
 
-const generateVerificationToken = (): string => {
+const generateVerificationToken = () => {
     return crypto.randomBytes(32).toString("hex");
 };
 
-const sendVerificationEmail = async (email: string, token: string): Promise<SentMessageInfo> => {
+const sendVerificationEmail = async (email: string, token: string) => {
     const verificationLink = `http://localhost:3000/users/verify-email?token=${token}`;
 
     const mailOptions = {
