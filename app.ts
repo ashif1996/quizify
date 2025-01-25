@@ -33,9 +33,9 @@ app.use(
     })
 );
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "../public")));
 app.use(expressLayouts);
-app.set("views", path.join(__dirname, "views"));
+app.set("views", path.join(__dirname, "../views"));
 app.set("view engine", "ejs");
 app.use(flash());
 
@@ -49,6 +49,8 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
 interface DecodedToken {
     firstName: string;
     lastName: string;
+    isVerified: boolean;
+    role: string;
 }
 
 // Authentication middleware
@@ -60,14 +62,20 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
             const decoded = jwt.verify(token, process.env.JWT_SECRET) as DecodedToken;
             res.locals.isLoggedIn = true;
             res.locals.username = `${decoded.firstName} ${decoded.lastName}`.trim();
+            res.locals.isVerified = decoded.isVerified;
+            res.locals.role = decoded.role;
         } catch (error) {
             console.error("Invalid token:", (error as Error).message);
             res.locals.isLoggedIn = false;
             res.locals.username = null;
+            res.locals.isVerified = false;
+            res.locals.role = null;
         }
     } else {
         res.locals.isLoggedIn = false;
         res.locals.username = null;
+        res.locals.isVerified = false;
+        res.locals.role = null;
     }
 
     next();
