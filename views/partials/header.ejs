@@ -28,6 +28,11 @@
                                     data-bs-toggle="dropdown" 
                                     aria-expanded="false">
                                     <%= username %>
+                                    <% if (role === 'Admin') { %>
+                                        <span class="badge bg-warning ms-2" style="font-size: 0.75rem;">Admin</span>
+                                    <% } else if (isVerified) { %>
+                                        <span class="badge bg-success ms-2" style="font-size: 0.75rem;">Verified</span>
+                                    <% } %>
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
                                     <li><a class="dropdown-item" href="/users/user-profile">Profile</a></li>
