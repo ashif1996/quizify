@@ -1,0 +1,103 @@
+<div class="container mt-5">
+    <!-- Breadcrumb -->
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/" style="color: #4CAF50;">
+                        <i class="fa fa-home" style="margin-right: 5px; color: #4CAF50;"></i>Home
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="/users/user-profile">
+                        Profile
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Quiz-History</li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- Flash Messages -->
+    <div class="flash-messages mb-4 text-center" style="margin: 0 auto;">
+        <% if (successMessage && successMessage.length > 0) { %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <%= successMessage %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <% } %>
+        <% if (errorMessage && errorMessage.length > 0) { %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <%= errorMessage %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <% } %>
+    </div>
+
+    <div class="card shadow-sm" style="margin-bottom: 100px;">
+        <div class="card-header text-white" style="background-color: #4CAF50;">
+            <h3 class="mb-0">Your Quiz History</h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <% if (quizHistory && quizHistory.length > 0) { %>
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Quiz ID</th>
+                                <th>Score</th>
+                                <th>Completed At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% quizHistory.forEach((history) => { %>
+                                <tr>
+                                    <td><%= history.quizId %></td>
+                                    <td><%= history.score %></td>
+                                    <td><%= history.completedAt.toLocaleDateString() %> <%= history.completedAt.toLocaleTimeString() %></td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+
+                    <!-- Pagination Controls -->
+                    <nav>
+                        <ul class="pagination">
+                            <!-- Previous Button -->
+                            <% if (currentPage > 1) { %>
+                                <li class="page-item">
+                                    <a class="page-link" href="/users/quiz-history?page=<%= currentPage - 1 %>">Previous</a>
+                                </li>
+                            <% } %>
+
+                            <!-- Page Numbers -->
+                            <% for (let i = 1; i <= totalPages; i++) { %>
+                                <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                    <a class="page-link" href="/users/quiz-history?page=<%= i %>"><%= i %></a>
+                                </li>
+                            <% } %>
+
+                            <!-- Next Button -->
+                            <% if (currentPage < totalPages) { %>
+                                <li class="page-item">
+                                    <a class="page-link" href="/users/quiz-history?page=<%= currentPage + 1 %>">Next</a>
+                                </li>
+                            <% } %>
+                        </ul>
+                    </nav>
+                <% } else { %>
+                    <div class="alert alert-info" style="margin-bottom: 100px;">
+                        You have not completed any quizzes yet.
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer / Back Button -->
+    <div class="d-flex justify-content-between mt-4" style="margin-bottom: 100px;">
+        <a href="/users/user-profile" class="btn btn-outline-secondary">
+            <i class="fa fa-arrow-left"></i> Back to Profile
+        </a>
+    </div>
+</div>

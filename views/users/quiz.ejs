@@ -1,0 +1,106 @@
+<style>
+    body {
+      background: #f9f9f9;
+      font-family: 'Poppins', sans-serif;
+    }
+    .quiz-container {
+      max-width: 900px;
+      margin: 50px auto;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+    .question-card {
+      margin-bottom: 20px;
+    }
+    .question-title {
+      font-weight: 600;
+      color: #333;
+    }
+    .answer-option {
+      margin-bottom: 10px;
+    }
+    .answer-option input {
+      margin-right: 10px;
+    }
+    .submit-btn {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .submit-btn:hover {
+      background: #0056b3;
+    }
+  </style>
+
+<div class="container outer-container mt-5">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/" style="color: #4CAF50;"><i class="fa fa-home" style="margin-right: 5px; color: #4CAF50;"></i>Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Quiz</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="flash-messages mb-4">
+        <% if (successMessage && successMessage.length > 0) { %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <%= successMessage %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <% } %>
+        <% if (errorMessage && errorMessage.length > 0) { %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <%= errorMessage %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <% } %>
+    </div>
+
+    <div class="quiz-container">
+      <h2 class="text-center mb-4">Quiz Questions</h2>
+  
+      <% if (questions && questions.length > 0) { %>
+          <form action="/users/submit-quiz" method="POST" class="answers">
+              <% questions.forEach((question, index) => { %>
+                  <div class="question-card p-3 border rounded">
+                      <p class="question-title">
+                          <%= index + 1 %>. <%- question.question %>
+                      </p>
+                      
+                      <% const allOptions = [...question.incorrect_answers, question.correct_answer].sort(); %>
+                      <% allOptions.forEach((option) => { %>
+                          <div class="form-check answer-option">
+                              <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="question-<%= index %>"
+                                  id="question-<%= index %>-<%= option %>"
+                                  value="<%= option %>"
+                              />
+                              <label class="form-check-label" for="question-<%= index %>-<%= option %>">
+                                  <%- option %>
+                              </label>
+                          </div>
+                      <% }) %>
+                  </div>
+              <% }) %>
+              
+              <!-- Submit button for the whole quiz -->
+              <button type="submit" class="submit-btn">Submit Quiz</button>
+          </form>
+      <% } else { %>
+          <p class="text-center">No questions available at the moment. Please try again later.</p>
+      <% } %>
+  </div>  
+</div>
+
+<script src="/js/contact.js"></script>

@@ -1,0 +1,90 @@
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: #f9f9f9;
+    }
+    .quiz-container {
+        max-width: 800px;
+        margin: 50px auto;
+        background: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .result-title {
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        color: #4CAF50;
+    }
+    .result-summary {
+        margin-top: 20px;
+        font-size: 18px;
+        text-align: center;
+    }
+    .result-details {
+        margin-top: 30px;
+    }
+    .question-card {
+        border-bottom: 1px solid #ddd;
+        padding: 10px 0;
+    }
+    .question-number {
+        font-weight: bold;
+    }
+    .correct-answer {
+        color: #4CAF50;
+    }
+    .user-answer {
+        font-style: italic;
+        color: #007bff;
+    }
+</style>
+
+<div class="container outer-container mt-5">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/" style="color: #4CAF50;"><i class="fa fa-home" style="margin-right: 5px; color: #4CAF50;"></i>Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Quiz</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="flash-messages mb-4">
+        <% if (successMessage && successMessage.length > 0) { %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <%= successMessage %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <% } %>
+        <% if (errorMessage && errorMessage.length > 0) { %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <%= errorMessage %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <% } %>
+    </div>
+
+    <div class="quiz-container">
+        <h1 class="result-title">Quiz Results</h1>
+
+        <div class="result-summary">
+            <p>You answered <strong><%= correct %></strong> out of <strong><%= resultData.length %></strong> questions correctly!</p>
+        </div>
+
+        <div class="result-details">
+            <% resultData.forEach((result, index) => { %>
+                <div class="question-card">
+                    <p class="question-number">Question <%= result.questionNumber %></p>
+                    <p>Correct Answer: <span class="correct-answer"><%= result.answer %></span></p>
+                    <% if (result.userAnswer !== "Not Answered") { %>
+                        <p>Your Answer: <span class="user-answer"><%= result.userAnswer %></span></p>
+                    <% } else { %>
+                        <p>No answer provided</p>
+                    <% } %>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</div>

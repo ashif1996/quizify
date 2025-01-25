@@ -9,7 +9,9 @@
             </ol>
         </nav>
     </div>
-    <div class="flash-messages mb-4">
+
+    <!-- Flash Messages Positioned Above Profile Box -->
+    <div class="flash-messages mb-4 text-center" style="margin: 0 auto;">
         <% if (successMessage && successMessage.length > 0) { %>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <%= successMessage %>
@@ -23,13 +25,15 @@
             </div>
         <% } %>
     </div>
+
+    <!-- Main Content -->
     <div class="main-container mt-5">
         <div class="profile-container" style="margin-bottom: 100px;">
             <h1>Welcome, <%= user.firstName %> <%= user.lastName %>!</h1>
             <% if (!user.isVerified) { %>
                 <form action="/users/resend-verification-email" method="POST">
                     <input type="hidden" name="email" value="<%= user.email %>" />
-                    <button type="submit">Resend Verification Email</button>
+                    <button type="submit" class="btn btn-secondary">Resend Verification Email</button>
                 </form>                
             <% } %>
             <section>
@@ -37,23 +41,19 @@
                 <ul>
                     <li><strong>Email:</strong> <%= user.email %></li>
                     <li><strong>Role:</strong> <%= user.role %></li>
-                    <li><strong>Account Verified:</strong> <%= user.isVerified ? "Yes" : "No" %></li>
+                    <li>
+                        <strong>Account Verified:</strong> 
+                        <% if (user.isVerified) { %>
+                            Yes <span class="badge bg-success ms-2" style="font-size: 0.75rem;">Verified</span>
+                        <% } else { %>
+                            No
+                        <% } %>
+                    </li>                    
                     <li><strong>Total Points:</strong> <%= user.totalPoints %></li>
                     <li><strong>Account Created At:</strong> <%= user.createdAt.toDateString() %></li>
                 </ul>
             </section>
-            <section>
-                <h2>Quiz History</h2>
-                <% if (user.quizHistory && user.quizHistory.length > 0) { %>
-                    <ul>
-                        <% user.quizHistory.forEach(quiz => { %>
-                            <li>Quiz ID: <%= quiz %></li>
-                        <% }); %>
-                    </ul>
-                <% } else { %>
-                    <p>No quiz history available.</p>
-                <% } %>
-            </section>
+            <a href="/users/quiz-history" class="btn btn-primary">Quiz History</a>
         </div>
     </div>
 </div>

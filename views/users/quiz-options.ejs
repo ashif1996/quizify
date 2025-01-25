@@ -1,0 +1,52 @@
+<div class="container outer-container mt-5">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/" style="color: #4CAF50;"><i class="fa fa-home" style="margin-right: 5px; color: #4CAF50;"></i>Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Quiz</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+        <div class="card shadow-lg p-4" style="border-radius: 15px; max-width: 500px; width: 100%;">
+            <div class="flash-messages mb-4">
+                <% if (successMessage && successMessage.length > 0) { %>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <%= successMessage %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <% } %>
+                <% if (errorMessage && errorMessage.length > 0) { %>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <%= errorMessage %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <% } %>
+            </div>
+
+            <h2 class="text-center mb-4">Select Quiz Options</h2>
+            <form action="/users/quiz-questions" method="POST">
+                <div class="mb-3">
+                    <label for="category" class="form-label">Category:</label>
+                    <select id="category" name="category" class="form-select shadow-sm" required>
+                        <option value="">-- Select a category --</option>
+                        <% categories.forEach(category => { %>
+                            <option value="<%= category.id %>"><%= category.name %></option>
+                        <% }); %>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="difficulty" class="form-label">Difficulty:</label>
+                    <select id="difficulty" name="difficulty" class="form-select shadow-sm" required>
+                        <option value="">-- Select a difficulty --</option>
+                        <% difficulties.forEach(level => { %>
+                            <option value="<%= level %>"><%= level.charAt(0).toUpperCase() + level.slice(1) %></option>
+                        <% }); %>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 py-2 mt-3 shadow-sm" style="border-radius: 30px;">Start Quiz</button>
+            </form>
+        </div>
+    </div>
+</div>
