@@ -20,15 +20,14 @@ const showFlashMessages = ({
     redirectUrl = "",
     isJson = false,
     success = false,
-}: FlashMessageOptions): Response => {
+}: FlashMessageOptions) => {
     req.flash(type, message);
 
     if (isJson) {
-        return res.status(status).json({ success });
+        res.status(status).json({ success });
+    } else {
+        res.status(status).redirect(redirectUrl);
     }
-
-    res.status(status).redirect(redirectUrl);
-    return res;
 };
 
 export default showFlashMessages;
