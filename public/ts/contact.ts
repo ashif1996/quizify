@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const handleFormSubmit = async (form: HTMLFormElement, endpoint: string, method: string): Promise<void> => {
         const formData = new FormData(form);
-        const jsonData = JSON.stringify(Object.fromEntries(formData.entries()));
+        const jsonData = JSON.stringify(Object.fromEntries((formData as any).entries()));
 
         showLoader();
 
