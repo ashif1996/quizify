@@ -47,6 +47,7 @@ a {
     text-align: center;
     background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
     padding: 20px;
+    padding-bottom: 30px;
     border-radius: 10px;
 }
 
